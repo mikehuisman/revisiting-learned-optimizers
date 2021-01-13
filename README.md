@@ -13,7 +13,7 @@ All implemented techniques in this repository can be split into two groups:
   - Centroid Fine-Tuning (CFT): Model with a special output layer. This layer learns vector representations for every class. Predictions are made by assigning the class with the most similar class representation to the input embedding. In similar fashion to the fine-tuning model, it is first trained on minibatches without task structure, and all hidden layers are frozen before performing meta-validation or meta-testing. 
   
 - **Meta-Learning**
-  - [LSTM Meta-Learner](https://openreview.net/pdf?id=rJY0-Kcll): Uses an LSTM to propose updates to the weights of a base-learner model. The code for this model comes from [Mark Dong](https://github.com/markdtw/meta-learning-lstm-pytorch/blob/master/learner.py) and has been adapted for our purposes.
+  - [LSTM Meta-Learner](https://openreview.net/pdf?id=rJY0-Kcll): Uses an LSTM to propose updates to the weights of a base-learner model. The code for this model comes from [Mark Dong](https://github.com/markdtw/meta-learning-lstm-pytorch) and has been adapted for our purposes.
   - [Model-Agnostic Meta-Learning (MAML)](https://arxiv.org/pdf/1703.03400.pdf): Learns a good set of initialization parameters for the base-learner. From this initialization, few gradient updates are enough to achieve good performance. Our MAML implementation uses 1 gradient update step and ignores second-order derivatives, as they were shown to be mostly irrelevant.
   - TURTLE (our proposed technique): A combination of the LSTM meta-learner and MAML where we replace the stateful LSTM by a stateless feed-forward network, and omit the default first-order assumption made by the LSTM meta-learner.
 
