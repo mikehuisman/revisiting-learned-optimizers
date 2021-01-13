@@ -1,0 +1,12 @@
+.ipynb_checkpoints/
+logfiles/
+results/
+sine/
+sine-functions/
+train/
+val/
+test/
+images/
+splits/
+__pycache__
+*.pkl
