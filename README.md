@@ -19,7 +19,7 @@ All implemented techniques in this repository can be split into two groups:
 
 ## Sine Wave Regression Experiments
 
-The sine wave problem was originally formulated in [Finn et al. (2017)](https://arxiv.org/pdf/1703.03400.pdf). For our purposes, we have slighty the setup. That is, we do perform validation, even though it is not required (no fixed training set; tasks are only seen once so there is no risk of overfitting), as it gives us valuable information about the learning process. Second, we do not maintain a running average of performance over meta-training tasks. Instead, we use a fixed meta-test set, consisting of 1K tasks on which we evaluate the models' performances. 
+The sine wave problem was originally formulated in [Finn et al. (2017)](https://arxiv.org/pdf/1703.03400.pdf). For our purposes, we have slighty the setup. That is, we do perform validation, even though it is not required (no fixed training set; tasks are only seen once so there is no risk of overfitting), as it gives us valuable information about the learning process. Second, we do not maintain a running average of performance over meta-training tasks. Instead, we use a fixed meta-test set, consisting of 2K tasks on which we evaluate the models' performances. 
 
 The problem is as follows. Every task is associated with a sine wave function `f(x) = amplitude * sin(x + phase)`. The amplitude and phase are chosen uniformly at random for every task, from the intervals [0.1, 5.0] and [0, pi] respectively. Support sets contain k examples (x,y), whereas the query sets contain more than k observations to ensure proper evaluation. 
 
