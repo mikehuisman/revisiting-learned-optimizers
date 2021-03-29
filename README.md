@@ -1,6 +1,6 @@
-# Revisiting Learned Optimizers in Few-Shot Settings
+# Stateless Neural Meta-Learning with Second-Order Gradients
 
-This is the Github repo associated with the MSc project titled: *Revisiting Learned Optimizers in Few-Shot Settings*.
+This is the Github repo associated with the paper: *Stateless Neural Meta-Learning with Second-Order Gradients*.
 On a high-level, we propose a new technique TURTLE and compare its performance to that of transfer learning baselines, MAML, and the LSTM meta-learner in various challenging scenarios. The first is the *Sine wave regression* problem, where the goal is to learn sine curves from few data points, as proposed by [Finn et al. (2017)](https://arxiv.org/pdf/1703.03400.pdf). The second is the challenging problem proposed by [Chen et al. (2019)](https://arxiv.org/pdf/1904.04232.pdf), where a the model is trained on *miniImageNet* and tested on *CUB*. We also implemented the reverse scenerio.
 
 ## Techniques
