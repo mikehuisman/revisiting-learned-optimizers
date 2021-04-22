@@ -242,7 +242,7 @@ def enumerator(cdir, file):
         path = paths[problem]
         for alg in os.listdir(path):
             alg_path = join(path, alg)
-            #process_runs(alg_path)
+            process_runs(alg_path)
             files = [join(alg_path, x) for x in os.listdir(alg_path) if file in x]            
             for filepath in files:
                 yield alg, problem, filepath
@@ -310,7 +310,7 @@ def process_scores(problem, alg, path, results, **kwargs):
     """
 
     # Read CSV file, aggregate mean and median scores
-    df = pd.read_csv(path, index_col=0)[:]
+    df = pd.read_csv(path, index_col=0)
     print(f"{problem}, {alg} : Entries found: {len(df)}")
     #print(df.columns)
     for col in df.columns: #["mean_loss", "median_loss"]

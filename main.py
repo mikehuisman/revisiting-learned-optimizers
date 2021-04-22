@@ -54,12 +54,13 @@ from algorithms.finetuning import FineTuning
 from algorithms.moso import MOSO
 from algorithms.turtle import Turtle
 from algorithms.maml import MAML
+from algorithms.ownlstm import LSTM
 from algorithms.modules.utils import get_init_score_and_operator
 from sine_loader import SineLoader
 from image_loader import ImageLoader
 from misc import BANNER, NAMETAG
 from configs import TFS_CONF, FT_CONF, CFT_CONF, LSTM_CONF,\
-                    MAML_CONF, MOSO_CONF, TURTLE_CONF
+                    MAML_CONF, MOSO_CONF, TURTLE_CONF, LSTM_CONF2
 
 FLAGS = argparse.ArgumentParser()
 
@@ -75,7 +76,7 @@ FLAGS.add_argument("--k_test", type=int, required=True,
                    help="Number examples per class in query set")
 
 FLAGS.add_argument("--model", choices=["tfs", "finetuning", "centroidft", 
-                   "lstm", "maml", "moso", "turtle"], required=True,
+                   "lstm", "maml", "moso", "lstm2", "turtle"], required=True,
                    help="Which model to use?")
 
 # Optional arguments
@@ -164,6 +165,12 @@ FLAGS.add_argument("--time_input", action="store_true", default=False,
 
 FLAGS.add_argument("--validate", action="store_true", default=False,
                    help="Validate performance on meta-validation tasks")
+
+FLAGS.add_argument("--value_clip", action="store_true", default=False,
+                   help="Use gradient value +10 clipping")
+
+FLAGS.add_argument("--hidden_size", type=int, default=None,
+                    help="Hidden size of the meta-learner LSTM")
 
 RESULT_DIR = "./results/"
 
@@ -278,6 +285,7 @@ def setup(args):
         "finetuning": (FineTuning, FT_CONF),
         "centroidft": (FineTuning, CFT_CONF), 
         "lstm": (LSTMMetaLearner, LSTM_CONF),
+        "lstm2": (LSTM, LSTM_CONF2),
         "maml": (MAML, MAML_CONF),
         "moso": (MOSO, MOSO_CONF),
         "turtle": (Turtle, TURTLE_CONF)
@@ -299,6 +307,7 @@ def setup(args):
     overwrite_conf(conf, args, "beta")
     overwrite_conf(conf, args, "meta_batch_size")
     overwrite_conf(conf, args, "time_input")
+    overwrite_conf(conf, args, "hidden_size")
     
     # Parse the 'layers' argument
     if not args.layers is None:
@@ -315,9 +324,9 @@ def setup(args):
     
     # If using multi-step maml, perform gradient clipping with -10, +10
     if not conf["T"] is None:
-        if conf["T"] > 1 and (args.model=="maml" or args.model=="turtle"):
+        if conf["T"] > 1 and (args.model=="maml" or args.model=="turtle" or args.value_clip):
             conf["grad_clip"] = 10
-        elif args.model == "lstm":
+        elif args.model == "lstm" or args.model == "lstm2":
             conf["grad_clip"] = 0.25 # it does norm clipping
         else:
             conf["grad_clip"] = None
