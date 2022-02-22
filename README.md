@@ -52,3 +52,32 @@ Once you have done this, you can define default arguments for the __init__ funct
 For data loaders, we have also defined an abstraction class *DataLoader* in *data_loader.py*. To create your own data loder, make sure to download the required files first. Afterwards, you can create your own file `yourdataloader.py` and define a class that inherits from `DataLoader`. Your class should have at least 4 functions: __init__ (initialization, where you load the data from files), _sample_batch (sample a flat batch of data for baseline models), _sample_episode (sample a task), and generator (generator object that iteratively yields batches or episodes depending on the provided argument). You can follow the examples of `sine_loader.py` and `image_loader.py`. 
 
 Once you have created your own DataLoader class, you should import it into the *main.py* file, add an option to the --problem argument for your new problem, and add an `if args.problem == yourproblem` statement to the `setup` function. You are then ready to run the algorithms on the new data set by simply running `main.py` with the argument `--problem yourproblem`!
+
+### Reproducing the results
+
+```python
+
+## First-order MAML
+python -u main.py --problem $2 --k_test 16 --model maml --validate --val_after 2500 --T 5 --model_spec FO-MAML-FINAL --k $1 --N 5 --cross_eval --T_test 10 --meta_batch_size 4 --runs 5
+
+## Second-order MAML
+python -u main.py --problem $2 --k_test 16 --model maml --validate --val_after 2500 --T 5 --model_spec SO-MAML-FINAL --second_order --k $1 --N 5 --cross_eval --T_test 10 --meta_batch_size 4 --runs 5
+
+
+## First order LSTM meta-learner
+python -u main.py --problem $1 --k_test 16 --validate --val_after 2500 --k 1 --N 5 --model lstm2 --model_spec FO-LSTM-FINAL --T 12 --runs 5
+
+python -u main.py --problem $1 --k_test 16 --validate --val_after 2500 --k 5 --N 5 --model lstm2 --model_spec FO-LSTM-FINAL --T 5 --runs 5
+
+## Second-order LSTM meta-learner
+python -u main.py --problem $2 --k_test 16 --validate --val_after 2500 --k $1 --N 5 --model lstm2 --model_spec SO-LSTM-FINAL --T 8 --runs 5 --input_type raw_grads --second_order 
+
+
+## First-order TURTLE
+python -u main.py --problem $2 --k_test 16 --k $1 --N 5 --model turtle --validate --val_after 2500 --lr 0.001 --model_spec FO-TURTLE-FINAL --layers 20,20,20,20,20,1 --input_type raw_grads --T 5 --time_input --meta_batch_size 2 --history grads --beta 0.9 --param_lr --runs 5 --cross_eval
+
+## Second-order TURTLE
+python -u main.py --problem $2 --k_test 16 --k $1 --N 5 --model turtle --validate --val_after 2500 --lr 0.001 --second_order --model_spec SO-TURTLE-FINAL --layers 20,20,20,20,20,1 --input_type raw_grads --T 5 --time_input --meta_batch_size 2 --history grads --beta 0.9 --param_lr --runs 5 --cross_eval
+
+
+```
