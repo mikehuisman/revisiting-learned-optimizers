@@ -40,20 +40,7 @@ We have made a special effort to make it easy to reproduce our results. Please f
 4. `cd` into the cloned Github repository and run *setup.py* using `python setup.py`. This will (i) download *miniImageNet* proposed by [Vinyals et al. (2016)](https://papers.nips.cc/paper/6385-matching-networks-for-one-shot-learning.pdf) and process it using the splits proposed by [Ravi et al. (2017)](https://openreview.net/pdf?id=rJY0-Kcll), and (ii) it will download the [*CUB*](http://www.vision.caltech.edu/visipedia/CUB-200-2011.html) dataset and prepares it for usage.  
 5. Run *main.py* with the command `python main.py --arg1 value1 --arg2 value2 ...`, where *argi* are argument names and values the corresponding values. The script will try to load all parameters from the config file *configs.py* and overwrite these parameters with your provided arguments where necessary. 
 
-## Extending the code
-We have tried to make it as easy as possible to extend our code. We have created high-level abstractions for core objects. Below you find instructions to create your custom algorithm or data loader. 
-
-### Creating your custom algorithm
-To create your own algorithm, you can create a new file called `youralgorithm.py` in the *algorithms* folder. In that file, you can define your own algorithm class which inherits from the *Algorithm* class specified in *algorithm.py*. You will need to implement 3 functions: __init__ (the initialization function), train (train on a given task), and evaluate (apply your algorithm to the task and obtain the performance on the query set). You can use other defind algorithms as examples on how to do this. 
-
-Once you have done this, you can define default arguments for the __init__ function in *configs.py*. Lastly, you can import your config, add a string identifier for your algorithm to the `choices` field in the --model argument in *main.py*, and add it to the dictionary `mod_to_conf`. You are then fully set to run your new algorithm by calling `main.py` with the argument `--model youralgorithmspecifier`!
-
-### Creating your own data loder
-For data loaders, we have also defined an abstraction class *DataLoader* in *data_loader.py*. To create your own data loder, make sure to download the required files first. Afterwards, you can create your own file `yourdataloader.py` and define a class that inherits from `DataLoader`. Your class should have at least 4 functions: __init__ (initialization, where you load the data from files), _sample_batch (sample a flat batch of data for baseline models), _sample_episode (sample a task), and generator (generator object that iteratively yields batches or episodes depending on the provided argument). You can follow the examples of `sine_loader.py` and `image_loader.py`. 
-
-Once you have created your own DataLoader class, you should import it into the *main.py* file, add an option to the --problem argument for your new problem, and add an `if args.problem == yourproblem` statement to the `setup` function. You are then ready to run the algorithms on the new data set by simply running `main.py` with the argument `--problem yourproblem`!
-
-### Reproducing the results
+### Reproducing the results from the paper
 
 ```python
 
@@ -81,3 +68,18 @@ python -u main.py --problem $2 --k_test 16 --k $1 --N 5 --model turtle --validat
 
 
 ```
+
+## Extending the code
+We have tried to make it as easy as possible to extend our code. We have created high-level abstractions for core objects. Below you find instructions to create your custom algorithm or data loader. 
+
+### Creating your custom algorithm
+To create your own algorithm, you can create a new file called `youralgorithm.py` in the *algorithms* folder. In that file, you can define your own algorithm class which inherits from the *Algorithm* class specified in *algorithm.py*. You will need to implement 3 functions: __init__ (the initialization function), train (train on a given task), and evaluate (apply your algorithm to the task and obtain the performance on the query set). You can use other defind algorithms as examples on how to do this. 
+
+Once you have done this, you can define default arguments for the __init__ function in *configs.py*. Lastly, you can import your config, add a string identifier for your algorithm to the `choices` field in the --model argument in *main.py*, and add it to the dictionary `mod_to_conf`. You are then fully set to run your new algorithm by calling `main.py` with the argument `--model youralgorithmspecifier`!
+
+### Creating your own data loder
+For data loaders, we have also defined an abstraction class *DataLoader* in *data_loader.py*. To create your own data loder, make sure to download the required files first. Afterwards, you can create your own file `yourdataloader.py` and define a class that inherits from `DataLoader`. Your class should have at least 4 functions: __init__ (initialization, where you load the data from files), _sample_batch (sample a flat batch of data for baseline models), _sample_episode (sample a task), and generator (generator object that iteratively yields batches or episodes depending on the provided argument). You can follow the examples of `sine_loader.py` and `image_loader.py`. 
+
+Once you have created your own DataLoader class, you should import it into the *main.py* file, add an option to the --problem argument for your new problem, and add an `if args.problem == yourproblem` statement to the `setup` function. You are then ready to run the algorithms on the new data set by simply running `main.py` with the argument `--problem yourproblem`!
+
+
